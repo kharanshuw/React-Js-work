@@ -10,21 +10,33 @@ import TodoContext from './ToolContext'
  */
 function TodoContextProvider({ children }) {
 
+
   /**
-     * The list of todos.
-     * @type {Array<Object>}
-     * @property {number} id - The id of the todo.
-     * @property {string} message - The message of the todo.
-     * @property {boolean} isComplete - The completion state of the todo.
-     */
+ * Initializes the todos state with stored todos from local storage.
+ *
+ * @returns {Array} The initial todos state, either loaded from local storage or an empty array.
+ */
   const [todos, setTodos] = useState(
-    [
-      {
-        id: Number(Date.now()),
-        message: "first todo",
-        isComplete: false
-      }
-    ]
+    /**
+     * Function to initialize the todos state.
+     *
+     * @returns {Array} The initial todos state.
+     */
+    () => {
+      /**
+       * Retrieves the stored todos from local storage.
+       *
+       * @type {string|null} The stored todos as a JSON string, or null if not found.
+       */
+      const storedTodos = localStorage.getItem('todos');
+
+      /**
+       * Parses the stored todos JSON string into an array, or returns an empty array if not found.
+       *
+       * @returns {Array} The parsed todos array, or an empty array.
+       */
+      return storedTodos ? JSON.parse(storedTodos) : [];
+    }
   );
 
   /**
@@ -46,6 +58,13 @@ function TodoContextProvider({ children }) {
     );
   }
 
+  /**
+   * Updates an existing todo in the list of todos.
+   * @param {number} id - The id of the todo to update.
+   * @param {Object} newTodoObj - The new todo object with updated properties.
+   * @return {void}
+   */
+
   const updateToDo = (id, newTodoObj) => {
     let newTodoArray = todos.map(
       (todo) => {
@@ -62,6 +81,11 @@ function TodoContextProvider({ children }) {
   }
 
 
+  /**
+   * Deletes a todo from the list of todos.
+   * @param {number} id - The id of the todo to delete.
+   * @return {void}
+   */
   const deleteToDo = (id) => {
     let newTodoArray = todos.filter(
       todo => todo.id !== id
@@ -71,11 +95,16 @@ function TodoContextProvider({ children }) {
   }
 
 
+  /**
+   * Toggles the completion state of a todo.
+   * @param {number} id - the id of the todo to toggle
+   * @return {void}
+   */
   const toggleComplete = (id) => {
     const newTodoArray = todos.map(
       (todo) => {
         if (todo.id === id) {
-          return { ...todo, isComplete: "true" }
+          return { ...todo, isComplete: !todo.isComplete }
         }
         else {
           return todo;
@@ -84,18 +113,26 @@ function TodoContextProvider({ children }) {
     )
 
     setTodos(newTodoArray);
+
   }
 
-
+  // Save todos to local storage whenever the todos state changes
   useEffect(() => {
-    console.log("changes in todolist printing it");
-    console.log(todos);
+    console.log('setting todos from localStorage printing from todocontextprovider', todos);
 
-  }, [todos.length]);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+
+
 
 
   return (
 
+    // TodoContext Provider Component: 
+    // This component wraps the application and provides the TodoContext to all its child components.
+    // It shares the todos state and the functions to manipulate it (addToDo, updateToDo, deleteToDo, toggleComplete) 
+    // with all the components that need access to the todo list.
     <TodoContext.Provider value={{ todos, addToDo, updateToDo, deleteToDo, toggleComplete }}>
       {children}
     </TodoContext.Provider>

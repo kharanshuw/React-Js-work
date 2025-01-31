@@ -48,28 +48,24 @@ function TodoForm() {
 
 
     return (
-        <div>
-
-            {/* form to take input message which will add todo  */}
-            <form onSubmit={add} className='flex'>
+        <div className="mb-6">
+            {/* Form to take input message which will add todo */}
+            <form onSubmit={add} className="flex">
                 <input
                     type="text"
-                    placeholder='write todo ..'
-                    className=''
+                    placeholder="Write todo..."
+                    className="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={todoMessage}
                     onChange={(e) => {
                         setTodoMessage(e.target.value);
                     }}
                 />
-
-                <button type='submit'>
-                    add
+                <button
+                    type="submit"
+                    className="p-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    Add
                 </button>
-
-
-
-
-
             </form>
         </div>
     )
