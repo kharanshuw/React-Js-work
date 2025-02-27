@@ -8,7 +8,6 @@ import { useId } from "react";
  * This is the parent component. 
  * It contains a form with two Childcomponent instances and a submit button. 
  * It uses useRef to create refs that it will forward to the Childcomponent instances.
- * @returns 
  */
 const ForwardRefs = () => {
 
@@ -51,7 +50,7 @@ const ForwardRefs = () => {
 
 
 
-// childcomponent with forwardref
+// childcomponent with useforwardref
 const Childcomponent = forwardRef(
     (props, ref) => {
         const id = useId();
@@ -65,7 +64,7 @@ const Childcomponent = forwardRef(
     }
 )
 
-
+//childcomponent withoud useforwardref hook 
 const Childcomponent2 = (props) => {
     const id = useId();
 
